@@ -1,0 +1,26 @@
+# docker-compose.yml
+version: '3.9'
+
+services:
+  app:
+    build: .
+    # override default entrypoint allows us to do `bun install` before serving
+    entrypoint: []
+    container_name: slip-API
+    restart: always
+    # execute bun install before we start the dev server in watch mode
+    command: [ "bun","run","dev"]
+    # expose the right ports
+    ports: ["9999:7000"]
+    # setup a host mounted volume to sync changes to the container
+    working_dir: /app
+    volumes: 
+      - "./src:/app/src"
+      - "/app/node_modules"
+    # networks:
+    #     cf_network:
+    #         ipv4_address: 10.0.0.123
+
+# networks:
+#     cf_network:
+#       external: true
